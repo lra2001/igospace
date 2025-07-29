@@ -33,8 +33,8 @@ And uses the languages/modules below:
 - Update Python
   - python.exe -m pip install --upgrade pip
 - Install SQLAlchemy
-  - pip install SQLAlchemy
-  - pip install flask-sqlalchemy
+  - pip install SQLAlchemy  
+  - pip install flask_sqlalchemy, sqlalchemy.orm
 
 ### Software
 - Visual Studio Code
@@ -50,6 +50,7 @@ And uses the languages/modules below:
 - [Download Python](https://www.python.org/downloads/)
 - [Flask Installation](https://flask.palletsprojects.com/en/stable/installation/)
 - [Flask Quickstart](https://flask.palletsprojects.com/en/stable/quickstart/)
+- [Templates](https://flask.palletsprojects.com/en/stable/tutorial/templates/)
 - [SQL Alchemy - Installation Guide](https://docs.sqlalchemy.org/en/20/intro.html#installation)
 - [python-dotenv 1.1.1](https://pypi.org/project/python-dotenv/)
 
