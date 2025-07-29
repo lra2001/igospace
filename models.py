@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20))
 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"<User id={self.id} username={self.username}>"
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,8 +23,10 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
 
+    cart_items = db.relationship('CartItem', backref='product', lazy=True)
+
     def __repr__(self):
-        return f"<Product {self.name}>"
+        return f"<Product id={self.id} name={self.name} price={self.price}>"
 
 class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +35,6 @@ class CartItem(db.Model):
     quantity = db.Column(db.Integer, default=1)
 
     user = db.relationship('User', backref='cart_items')
-    product = db.relationship('Product')
 
     def __repr__(self):
-        return f"<CartItem {self.product.name} (x{self.quantity})>"
+        return f"<CartItem id={self.id} user_id={self.user_id} product_id={self.product_id} quantity={self.quantity}>"
