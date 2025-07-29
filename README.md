@@ -33,7 +33,7 @@ And uses the languages/modules below:
 - Update Python
   - python.exe -m pip install --upgrade pip
 - Install SQLAlchemy
-  - pip install SQLAlchemy  
+  - pip install SQLAlchemy
   - pip install flask_sqlalchemy, sqlalchemy.orm
 
 ### Software
@@ -59,3 +59,7 @@ And uses the languages/modules below:
 - [Image Resizer](https://imageresizer.com/)
 - [Create Logo](https://www.canva.com/)
 - [Convert to favicon](https://favicon.io/favicon-converter/)
+
+### Errors
+- [Import "flask_sqlalchemy" could not be resolved](https://stackoverflow.com/questions/64981804/importerror-flask-sqlalchemy-could-not-be-resolved)
+- [ModuleNotFoundError: No module named 'psycopg2'](https://blog.finxter.com/fixed-modulenotfounderror-no-module-named-psycopg2/)
