@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: igospace-inst
+    name: igospace
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
