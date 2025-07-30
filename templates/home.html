@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to iGo Space Travel{% endblock %}
+
+{% block header %}
+  <h1>Explore the Final Frontier</h1>
+  <p>Your gateway to extraordinary space adventures</p>
+{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <img src="{{ url_for('static', filename='images/space-rocket.jpg') }}" alt="Space rocket launching" class="hero-img">
+    <div class="hero-text">
+      <h2>Ready for Your Next Journey?</h2>
+      <p>Discover exclusive space gear and book your cosmic trip today.</p>
+      <a href="{{ url_for('shop') }}" class="btn-primary">Visit Shop</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <h3>Top Quality Gear</h3>
+      <p>From helmets to suits, gear up with the best in the industry.</p>
+    </div>
+    <div class="feature">
+      <h3>Unique Destinations</h3>
+      <p>Explore space stations, moons, and beyond with our curated trips.</p>
+    </div>
+    <div class="feature">
+      <h3>Expert Support</h3>
+      <p>Our team is here to assist you every step of the way.</p>
+    </div>
+  </section>
+{% endblock %}
