@@ -7,6 +7,7 @@ from models import db, User, Product, CartItem
 
 # create the app
 app = Flask(__name__)
+
 # configure the database
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 print(f"🔧 SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}") # debugging

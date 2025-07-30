@@ -3,7 +3,6 @@ import os
 
 load_dotenv()
 
-# Update the SQLALCHEMY_DATABASE_URI to use environment variables
-SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-
+# Use DATABASE_URL from environment variables or default to local db on dev
+SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///igospace.db")
 SQLALCHEMY_TRACK_MODIFICATIONS = False
