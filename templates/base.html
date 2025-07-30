@@ -1,41 +1,59 @@
 <!doctype html>
-<title>{% block title %}iGo Space Travel{% endblock %}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<nav>
-  <div class="nav-left">
-    <a href="{{ url_for('home') }}">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-    </a>
-    <ul class="nav-links">
-      <li><a href="{{ url_for('shop') }}">Shop</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </div>
 
-  <div class="nav-right">
-    <a href="{{ url_for('cart') }}" class="cart-link">
-      🛒 Cart
-      {% if cart_count %}
+<head>
+  <title>{% block title %}iGo Space Travel{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="{{ url_for('home') }}">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('shop') }}">Shop</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-right">
+      <a href="{{ url_for('cart') }}" class="cart-link">
+        🛒 Cart
+        {% if cart_count %}
         <span class="cart-count">{{ cart_count }}</span>
-      {% endif %}
-    </a>
+        {% endif %}
+      </a>
 
-    {% if current_user.is_authenticated %}
+      {% if current_user.is_authenticated %}
       <span class="welcome-msg">Welcome {{ current_user.fname }}!</span>
       <a href="{{ url_for('logout') }}" class="auth-btn">Logout</a>
-    {% else %}
+      {% else %}
       <a href="{{ url_for('login') }}" class="auth-btn">Login</a>
-    {% endif %}
-  </div>
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
+      {% endif %}
+    </div>
+  </nav>
+
+  <section class="content">
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+
+    {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+  </section>
+
+  {% block scripts %}
+  <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% endblock %}
+
+</body>
+
+</html>

@@ -1,32 +1,44 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
+<h1>{% block title %}Register{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  <form method="post" novalidate class="register-form">
-    <label for="username" class="form-label">Username</label>
-    <input name="username" id="username" required class="form-input">
+<form method="post" novalidate class="register-form" id="registerForm">
+  <div id="form-errors" class="form-errors"></div>
+  <label for="username" class="form-label">Username</label>
+  <input name="username" id="username" required class="form-input">
 
-    <label for="email" class="form-label">Email</label>
-    <input type="email" name="email" id="email" required class="form-input">
+  <label for="email" class="form-label">Email</label>
+  <input type="email" name="email" id="email" required class="form-input">
 
-    <label for="fname" class="form-label">First Name</label>
-    <input name="fname" id="fname" class="form-input">
+  <label for="fname" class="form-label">First Name</label>
+  <input name="fname" id="fname" required class="form-input">
 
-    <label for="lname" class="form-label">Last Name</label>
-    <input name="lname" id="lname" class="form-input">
+  <label for="lname" class="form-label">Last Name</label>
+  <input name="lname" id="lname" required class="form-input">
 
-    <label for="address" class="form-label">Address</label>
-    <input name="address" id="address" class="form-input">
+  <label for="address" class="form-label">Address</label>
+  <input name="address" id="address" required class="form-input">
 
-    <label for="phone" class="form-label">Phone</label>
-    <input name="phone" id="phone" class="form-input">
+  <label for="phone" class="form-label">Phone</label>
+  <input name="phone" id="phone" required class="form-input">
 
-    <label for="password" class="form-label">Password</label>
-    <input type="password" name="password" id="password" required class="form-input">
+  <label for="password" class="form-label">Password</label>
+  <input type="password" name="password" id="password" required class="form-input">
 
-    <input type="submit" value="Register" class="form-submit">
-  </form>
+  <p class="password-instructions">
+    Password must be at least 8 characters and include:
+    1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
+  </p>
+
+  <div id="error-message" class="error-message"></div>
+
+  <input type="submit" value="Register" class="form-submit">
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
 {% endblock %}

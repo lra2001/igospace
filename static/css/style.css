@@ -245,3 +245,31 @@ form input[type="submit"]:hover {
 .form-submit:hover {
     background-color: #ff3b2e;
 }
+
+.form-errors {
+  color: #c0392b;
+  background-color: #fbeaea;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #c0392b;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.error-message {
+  margin-top: 5px;
+  color: #ff4c4c;
+  font-size: 0.9em;
+}
+
+.input-error {
+  border: 1px solid #ff4c4c !important;
+  background-color: #fff0f0;
+}
+
+.password-instructions {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
