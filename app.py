@@ -9,6 +9,7 @@ from models import db, User, Product, CartItem
 app = Flask(__name__)
 # configure the database
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+print(f"🔧 SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}") # debugging
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 app.config['SECRET_KEY'] = 'supersecretkey'
 
