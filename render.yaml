@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: igo-space-travel
+    name: igospace
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
