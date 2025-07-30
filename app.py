@@ -2,7 +2,7 @@ from flask import Flask, render_template, send_from_directory, redirect, url_for
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
-from models import db, User
+from models import db, User, Product, CartItem
 
 # create the app
 app = Flask(__name__)
@@ -74,6 +74,26 @@ def logout():
     logout_user()
     flash("You have been logged out.", "info")
     return redirect(url_for("home"))
+
+@app.route('/shop')
+def shop():
+    products = Product.query.all()
+    return render_template('shop.html', products=products, active_page='shop')
+
+@app.route('/add_to_cart/<int:product_id>', methods=['POST'])
+@login_required
+def add_to_cart(product_id):
+    quantity = int(request.form.get('quantity', 1))
+    cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+
+    if cart_item:
+        cart_item.quantity += quantity
+    else:
+        cart_item = CartItem(user_id=current_user.id, product_id=product_id, quantity=quantity)
+        db.session.add(cart_item)
+
+    db.session.commit()
+    return redirect(url_for('shop'))
 
 if __name__ == "__main__":
     app.run(debug=True)
