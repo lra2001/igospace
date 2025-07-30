@@ -21,7 +21,10 @@ login_manager.login_view = 'login'
 migrate = Migrate(app, db)
 
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()
+    except Exception as e:
+        print(f"DB Error: {e}")
 
 @login_manager.user_loader
 def load_user(user_id):
