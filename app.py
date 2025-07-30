@@ -4,7 +4,6 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from models import db, User, Product, CartItem
-import psycopg2
 
 # create the app
 app = Flask(__name__)
@@ -21,10 +20,7 @@ login_manager.login_view = 'login'
 migrate = Migrate(app, db)
 
 with app.app_context():
-    try:
-        db.create_all()
-    except Exception as e:
-        print(f"DB Error: {e}")
+    db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
