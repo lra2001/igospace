@@ -1,6 +1,7 @@
 from flask import Flask, render_template, send_from_directory, redirect, url_for, request, flash
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
+from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from models import db, User, Product, CartItem
 
@@ -16,6 +17,7 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+migrate = Migrate(app, db)
 
 with app.app_context():
     db.create_all()
@@ -33,17 +35,34 @@ def favicon():
 def home():
     return render_template('home.html', active_page='home')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
         username = request.form["username"]
+        email = request.form["email"]
+        fname = request.form.get("fname")
+        lname = request.form.get("lname")
+        address = request.form.get("address")
+        phone = request.form.get("phone")
         password = bcrypt.generate_password_hash(request.form["password"]).decode("utf-8")
 
+        # Check if username or email already exists
         if User.query.filter_by(username=username).first():
             flash("Username already exists. Please choose another.", "warning")
             return redirect(url_for("register"))
+        if User.query.filter_by(email=email).first():
+            flash("Email already registered. Please use another.", "warning")
+            return redirect(url_for("register"))
 
-        new_user = User(username=username, password=password)
+        new_user = User(
+            username=username,
+            email=email,
+            fname=fname,
+            lname=lname,
+            address=address,
+            phone=phone,
+            password=password
+        )
         db.session.add(new_user)
         db.session.commit()
         flash("Registration successful. You can now log in.", "success")
@@ -83,13 +102,35 @@ def shop():
 @app.route('/cart')
 @login_required
 def cart():
-    # Fetch cart items for the current user
     cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    return render_template('cart.html', cart_items=cart_items, active_page='cart')
 
-    # Optionally, calculate total price or other info
-    total_price = sum(item.quantity * item.product.price for item in cart_items)
+@app.route('/update_cart', methods=['POST'])
+@login_required
+def update_cart():
+    # Parse quantities from form inputs named like quantities[<item_id>]
+    for key in request.form:
+        if key.startswith('quantities[') and key.endswith(']'):
+            item_id = key[11:-1]  # Extract item id inside the brackets
+            quantity = request.form.get(key, type=int)
+            cart_item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first()
+            if cart_item:
+                if quantity and quantity > 0:
+                    cart_item.quantity = quantity
+                else:
+                    # Remove item if quantity <= 0
+                    db.session.delete(cart_item)
 
-    return render_template('cart.html', cart_items=cart_items, total_price=total_price, active_page='cart')
+    # Remove items explicitly checked for removal
+    remove_ids = request.form.getlist('remove')
+    for item_id in remove_ids:
+        cart_item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first()
+        if cart_item:
+            db.session.delete(cart_item)
+
+    db.session.commit()
+    flash("Cart updated successfully!", "success")
+    return redirect(url_for('cart'))
 
 @app.context_processor
 def inject_cart_count():

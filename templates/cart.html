@@ -1,22 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title %}Your Cart{% endblock %}
 
 {% block header %}
-  <h1>Your Shopping Cart</h1>
+  <h1>Your Cart</h1>
 {% endblock %}
 
 {% block content %}
-  {% if cart_items %}
-    <ul class="cart-list">
+<form method="POST" action="{{ url_for('update_cart') }}">
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for item in cart_items %}
-        <li>
-          {{ item.product.name }} — Quantity: {{ item.quantity }} — Price: €{{ "%.2f"|format(item.product.price * item.quantity) }}
-        </li>
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>
+          <input type="number" name="quantities[{{ item.id }}]" value="{{ item.quantity }}" min="0">
+        </td>
+        <td>€{{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+        <td>
+          <input type="checkbox" name="remove" value="{{ item.id }}">
+        </td>
+      </tr>
       {% endfor %}
-    </ul>
-    <p><strong>Total: €{{ "%.2f"|format(total_price) }}</strong></p>
-  {% else %}
-    <p>Your cart is empty.</p>
-  {% endif %}
+    </tbody>
+  </table>
+  <button type="submit">Update Cart</button>
+</form>
 {% endblock %}

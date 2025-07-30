@@ -5,11 +5,28 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
+  <form method="post" novalidate class="register-form">
+    <label for="username" class="form-label">Username</label>
+    <input name="username" id="username" required class="form-input">
+
+    <label for="email" class="form-label">Email</label>
+    <input type="email" name="email" id="email" required class="form-input">
+
+    <label for="fname" class="form-label">First Name</label>
+    <input name="fname" id="fname" class="form-input">
+
+    <label for="lname" class="form-label">Last Name</label>
+    <input name="lname" id="lname" class="form-input">
+
+    <label for="address" class="form-label">Address</label>
+    <input name="address" id="address" class="form-input">
+
+    <label for="phone" class="form-label">Phone</label>
+    <input name="phone" id="phone" class="form-input">
+
+    <label for="password" class="form-label">Password</label>
+    <input type="password" name="password" id="password" required class="form-input">
+
+    <input type="submit" value="Register" class="form-submit">
   </form>
 {% endblock %}
