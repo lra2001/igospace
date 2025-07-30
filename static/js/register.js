@@ -1,78 +1,51 @@
-document.getElementById('registerForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // prevent default submission
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // prevent default submit for validation
 
-    // Clear previous errors
-    const errorElems = this.querySelectorAll('.error-message');
-    errorElems.forEach(el => el.remove());
+  // Clear previous error messages and styles
+  const errorElems = this.querySelectorAll('.error-message');
+  errorElems.forEach(el => el.remove());
+  const inputs = [this.username, this.password, this.email, this.fname, this.lname, this.address, this.phone];
+  inputs.forEach(input => input.classList.remove('input-error'));
 
-    const errorBox = document.getElementById("form-errors");
-    errorBox.innerHTML = ''; // clear previous top error box
+  let isValid = true;
 
-    let isValid = true;
-    let errors = [];
+  function showError(input, message) {
+    isValid = false;
+    input.classList.add('input-error');
+    const error = document.createElement('div');
+    error.className = 'error-message';
+    error.style.color = '#ff4c4c';
+    error.style.fontSize = '0.9em';
+    error.textContent = message;
+    input.parentNode.insertBefore(error, input.nextSibling);
+  }
 
-    function showError(input, message) {
-        isValid = false;
-        errors.push(message);
-
-        const error = document.createElement('div');
-        error.className = 'error-message';
-        error.textContent = message;
-        input.parentNode.insertBefore(error, input.nextSibling);
-        input.classList.add('input-error'); // highlight field
+  // Required fields check
+  inputs.forEach(field => {
+    if (!field.value.trim()) {
+      showError(field, `${field.name.charAt(0).toUpperCase() + field.name.slice(1)} is required`);
     }
+  });
 
-    // Get form fields
-    const { username, password, email, fname, lname, address, phone } = this;
+  // Email format check
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (this.email.value && !emailPattern.test(this.email.value)) {
+    showError(this.email, 'Please enter a valid email address');
+  }
 
-    // Clear old highlights
-    [username, password, email, fname, lname, address, phone].forEach(input => {
-        input.classList.remove('input-error');
-    });
+  // Phone number check: exactly 10 digits only
+  const phonePattern = /^\d{10}$/;
+  if (this.phone.value && !phonePattern.test(this.phone.value)) {
+    showError(this.phone, 'Phone number must be exactly 10 digits');
+  }
 
-    // Required check
-    const fieldLabels = {
-        username: "Username",
-        password: "Password",
-        email: "Email",
-        fname: "First name",
-        lname: "Last name",
-        address: "Address",
-        phone: "Phone number"
-    };
+  // Password strength check
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};:'",.<>?/\\|`~]).{8,}$/;
+  if (this.password.value && !passwordPattern.test(this.password.value)) {
+    showError(this.password, 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
+  }
 
-    // Required check with specific messages
-    [username, password, email, fname, lname, address, phone].forEach(field => {
-        if (!field.value.trim()) {
-            const label = fieldLabels[field.name] || "This field";
-            showError(field, `${label} is a required field`);
-        }
-    });
-
-    // Email format
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email.value && !emailPattern.test(email.value)) {
-        showError(email, 'Please enter a valid email address');
-    }
-
-    // Phone: exactly 10 digits
-    const phonePattern = /^\d{10}$/;
-    if (phone.value && !phonePattern.test(phone.value)) {
-        showError(phone, 'Phone number must be exactly 10 digits');
-    }
-
-    // Password: strong
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    if (password.value && !passwordPattern.test(password.value)) {
-        showError(password, 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character');
-    }
-
-    // Show error summary at top
-    if (!isValid) {
-        errorBox.innerHTML = errors.map(err => `<p>${err}</p>`).join("");
-        return;
-    }
-
-    // All good
+  if (isValid) {
     this.submit();
+  }
 });
