@@ -2,6 +2,7 @@ from flask import Flask, render_template, send_from_directory, redirect, url_for
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from models import db, User, Product, CartItem
 
@@ -9,12 +10,15 @@ from models import db, User, Product, CartItem
 app = Flask(__name__)
 
 # configure the database
+db = SQLAlchemy()
+
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 print(f"🔧 SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}") # debugging
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 app.config['SECRET_KEY'] = 'supersecretkey'
 
 # initialize the app with the extension
+
 db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
