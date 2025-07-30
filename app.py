@@ -157,5 +157,5 @@ def add_to_cart(product_id):
     db.session.commit()
     return redirect(url_for('shop'))
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
