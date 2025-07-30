@@ -80,6 +80,25 @@ def shop():
     products = Product.query.all()
     return render_template('shop.html', products=products, active_page='shop')
 
+@app.route('/cart')
+@login_required
+def cart():
+    # Fetch cart items for the current user
+    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+
+    # Optionally, calculate total price or other info
+    total_price = sum(item.quantity * item.product.price for item in cart_items)
+
+    return render_template('cart.html', cart_items=cart_items, total_price=total_price, active_page='cart')
+
+@app.context_processor
+def inject_cart_count():
+    if current_user.is_authenticated:
+        count = CartItem.query.filter_by(user_id=current_user.id).count()
+    else:
+        count = 0
+    return dict(cart_count=count)
+
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
 @login_required
 def add_to_cart(product_id):

@@ -1,17 +1,34 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - iGo Space Travel</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<title>{% block title %}iGo Space Travel{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <nav>
-  <h1>iGo Space Travel</h1>
-  <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('logout') }}">Log Out</a>
+  <div class="nav-left">
+    <a href="{{ url_for('home') }}">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+    </a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('shop') }}">Shop</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="nav-right">
+    <a href="{{ url_for('cart') }}" class="cart-link">
+      🛒 Cart
+      {% if cart_count %}
+        <span class="cart-count">{{ cart_count }}</span>
+      {% endif %}
+    </a>
+
+    {% if current_user.is_authenticated %}
+      <span class="welcome-msg">Welcome {{ current_user.fname }}!</span>
+      <a href="{{ url_for('logout') }}" class="auth-btn">Logout</a>
     {% else %}
-      <li><a href="{{ url_for('register') }}">Register</a>
-      <li><a href="{{ url_for('login') }}">Log In</a>
+      <a href="{{ url_for('login') }}" class="auth-btn">Login</a>
     {% endif %}
-  </ul>
+  </div>
 </nav>
 <section class="content">
   <header>
