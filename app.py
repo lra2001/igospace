@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from models import db, User, Product, CartItem
+import psycopg2
 
 # create the app
 app = Flask(__name__)
