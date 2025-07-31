@@ -10,7 +10,6 @@ app = Flask(__name__)
 
 # configure the database
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-print(f"🔧 SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}") # debugging
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 app.config['SECRET_KEY'] = 'supersecretkey'
 
@@ -158,5 +157,5 @@ def add_to_cart(product_id):
     db.session.commit()
     return redirect(url_for('shop'))
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True)

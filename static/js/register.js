@@ -1,5 +1,8 @@
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-  e.preventDefault(); // prevent default submit for validation
+const registerForm = document.getElementById('registerForm');
+
+if (registerForm) {
+  registerForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // Only load on the register page
 
   // Clear previous error messages and styles
   const errorElems = this.querySelectorAll('.error-message');
@@ -48,4 +51,5 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
   if (isValid) {
     this.submit();
   }
-});
+ });
+}
