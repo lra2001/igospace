@@ -77,9 +77,9 @@ def login():
     next_page = request.args.get('next')
 
     if request.method == "POST":
-        username = request.form["username"]
+        identifier = request.form["username"]
         password = request.form["password"]
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
 
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)

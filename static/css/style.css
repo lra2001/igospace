@@ -252,6 +252,10 @@ nav {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.register {
+    text-align: center;
+}
+
 form {
     max-width: 400px;
     margin: 30px auto;
