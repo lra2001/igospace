@@ -494,3 +494,31 @@ form input.input-error {
     background: #4BB543;
     color: #fff;
 }
+
+.order-header {
+  display: flex;
+  align-items: center;      /* Vertically center items */
+  gap: 10px;
+}
+
+.order-header p {
+  margin: 0;                /* Remove default margin */
+  font-size: 1.1rem;
+  font-weight: bolder;
+  line-height: 1;           /* Tighter vertical alignment */
+  display: flex;
+  align-items: center;
+}
+
+.order-header .confirmation-icon {
+  margin: 0;                /* Remove extra margin */
+  display: flex;
+  align-items: center;
+}
+
+.order-header .confirmation-icon i {
+  color: #4BB543;
+  font-size: 1.3rem;
+  margin-left: 6px;
+  margin-bottom: 0;         /* Remove bottom margin */
+}
