@@ -51,6 +51,75 @@ body {
     background-color: #005bb5;
 }
 
+.update_cart-btn {
+  margin-top: 1rem;
+  text-align: right;
+}
+
+.remove-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Align icon to center */
+    justify-content: center; /* Center horizontally */
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.remove-icon i {
+    font-size: 1.5rem;
+    color: #ff4c4c;
+    margin: 0;
+    display: block;
+}
+
+.remove-icon:hover {
+  color: #e74c3c;
+  transform: scale(1.1);
+}
+
+.checkout-btn {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.checkout-form {
+  margin-top: 1rem;
+}
+
+.checkout-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.checkout-table th,
+.checkout-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.checkout-total {
+  text-align: right;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.product-name {
+  max-width: 200px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.quantity-input {
+    text-align: center;
+    vertical-align: middle;
+}
+
 /* --- Features Section --- */
 .features {
     display: flex;
@@ -328,6 +397,26 @@ form input[type="submit"]:hover {
 
 .form-submit:hover {
     background-color: #ff3b2e;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-name {
+  max-width: 200px;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .error-message {

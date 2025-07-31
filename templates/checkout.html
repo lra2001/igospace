@@ -1,37 +1,36 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container">
-  <h2 class="mt-4">Checkout</h2>
+{% extends 'base.html' %}
 
-  {% if cart_items %}
-  <table class="table mt-3">
+{% block title %}Checkout{% endblock %}
+
+{% block header %}
+<h1>Checkout</h1>
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('checkout') }}" class="checkout-form">
+  <table class="checkout-table">
     <thead>
       <tr>
         <th>Product</th>
-        <th>Qty</th>
-        <th>Unit Price</th>
+        <th>Quantity</th>
         <th>Subtotal</th>
       </tr>
     </thead>
     <tbody>
       {% for item in cart_items %}
       <tr>
-        <td>{{ item.product.name }}</td>
+        <td class="product-name">{{ item.product.name }}</td>
         <td>{{ item.quantity }}</td>
-        <td>€{{ "%.2f"|format(item.product.price) }}</td>
-        <td>€{{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+        <td>€{{ "%.2f"|format(item.subtotal) }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 
-  <h4>Total: €{{ "%.2f"|format(total) }}</h4>
+  <p class="checkout-total"><strong>Total:</strong> €{{ "%.2f"|format(total) }}</p>
 
-  <form method="POST" class="mt-4">
-    <button type="submit" class="btn btn-success">Place Order</button>
-  </form>
-  {% else %}
-  <p>Your cart is empty.</p>
-  {% endif %}
-</div>
+  <div class="checkout-btn">
+    <button type="submit" class="btn btn-primary">Confirm Order</button>
+  </div>
+</form>
 {% endblock %}

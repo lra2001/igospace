@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block content %}
-<form method="POST" action="{{ url_for('update_cart') }}">
-  <table>
+<form method="POST" action="{{ url_for('update_cart') }}" class="card p-4 shadow-sm">
+  <table class="cart-table">
     <thead>
       <tr>
         <th>Product</th>
@@ -20,26 +20,35 @@
     <tbody>
       {% for item in cart_items %}
       <tr>
-        <td>{{ item.product.name if item.product is defined else item['product'].name }}</td>
+        <td class="product-name">{{ item.product.name if item.product is defined else item['product'].name }}</td>
         <td>
           <input type="number" name="quantities[{{ item.id if item.id is defined else item['product'].id }}]"
-            value="{{ item.quantity if item.quantity is defined else item['quantity'] }}" min="0">
-        </td>
-        <td>€{{ "%.2f"|format((item.product.price * item.quantity) if item.product is defined else item['subtotal'])}}
+            value="{{ item.quantity if item.quantity is defined else item['quantity'] }}" min="0" class="quantity-input">
         </td>
         <td>
-          <input type="checkbox" name="remove" value="{{ item.id if item.id is defined else item['product'].id }}">
+          €{{ "%.2f"|format((item.product.price * item.quantity) if item.product is defined else item['subtotal']) }}
+        </td>
+        <td>
+          <input type="checkbox" name="remove" value="{{ item.id if item.id is defined else item['product'].id }}"
+            style="display:none;" id="remove-{{ item.id if item.id is defined else item['product'].id }}">
+          <button type="button" class="remove-icon"
+            data-item-id="{{ item.id if item.id is defined else item['product'].id }}" title="Remove item">
+            <i class="fas fa-trash-alt"></i>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-  <button type="submit">Update Cart</button>
-</form>
 
-{% if cart_items %}
-<form action="{{ url_for('checkout') }}" method="get">
-  <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <div class="update_cart-btn">
+      <button type="submit" class="btn btn-warning">Update Cart</button>
+    </div>
+    {% if cart_items %}
+    <div class="checkout-btn">
+      <a href="{{ url_for('checkout') }}" class="btn btn-primary">Proceed to Checkout</a>
+    </div>
+    {% endif %}
+  </div>
 </form>
-{% endif %}
 {% endblock %}
