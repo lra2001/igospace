@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from models import db, User, Product, CartItem, Order, OrderItem
+from datetime import timedelta
 
 # create the app
 app = Flask(__name__)
@@ -240,7 +241,7 @@ def checkout():
 
         db.session.commit()
         flash("Order placed successfully!", "success")
-        return redirect(url_for('order_confirmation', order_id=new_order.id))
+        return redirect(url_for('order-confirmation', order_id=new_order.id))
 
     total = sum(item.product.price * item.quantity for item in cart_items)
     return render_template('checkout.html', cart_items=cart_items, total=total)
@@ -254,7 +255,13 @@ def order_confirmation(order_id):
         flash("Access denied to this order.", "danger")
         return redirect(url_for('home'))
 
-    return render_template('order_confirmation.html', order=order)
+    return render_template('order-confirmation.html', order=order, timedelta=timedelta)
+
+@app.route('/order-history')
+@login_required
+def order_history():
+    orders = Order.query.filter_by(user_id=current_user.id).order_by(Order.id.desc()).all()
+    return render_template('order-history.html', orders=orders)
 
 if __name__ == "__main__":
     app.run(debug=True)
