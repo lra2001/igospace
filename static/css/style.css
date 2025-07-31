@@ -522,3 +522,13 @@ form input.input-error {
   margin-left: 6px;
   margin-bottom: 0;         /* Remove bottom margin */
 }
+
+.order-details-btn {
+    margin-top: 8px;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+
+.order-card p{
+    margin-bottom: 0px; /* Reduce space below the total */
+}
