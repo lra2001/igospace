@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory, redirect, url_for, request, flash
+from flask import Flask, render_template, send_from_directory, redirect, url_for, request, flash, session
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_migrate import Migrate
@@ -74,16 +74,17 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    next_page = request.args.get('next')
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-
         user = User.query.filter_by(username=username).first()
 
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             flash("Logged in successfully.", "success")
-            return redirect(url_for("home"))
+            return redirect(url_for(next_page)) if next_page else redirect(url_for("home"))
         else:
             flash("Invalid credentials. Please try again.", "danger")
 
@@ -102,13 +103,37 @@ def shop():
     return render_template('shop.html', products=products, active_page='shop')
 
 @app.route('/cart')
-@login_required
 def cart():
-    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-    return render_template('cart.html', cart_items=cart_items, active_page='cart')
+    if current_user.is_authenticated:
+        cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    else:
+        session_cart = session.get('cart', {})
+        products = Product.query.filter(Product.id.in_(session_cart.keys())).all()
+        cart_items = []
+        total = 0
+
+        for product in products:
+            qty = session_cart[str(product.id)]
+            subtotal = product.price * qty
+            total += subtotal
+            cart_items.append({
+                'product': product,
+                'quantity': qty,
+                'subtotal': subtotal
+            })
+
+        return render_template('cart.html', cart_items=cart_items, total=total)
+
+# Add to cart functionality using session
+def add_to_session_cart(product_id, quantity):
+    cart = session.get('cart', {})
+    if str(product_id) in cart:
+        cart[str(product_id)] += quantity
+    else:
+        cart[str(product_id)] = quantity
+    session['cart'] = cart
 
 @app.route('/update_cart', methods=['POST'])
-@login_required
 def update_cart():
     # Parse quantities from form inputs named like quantities[<item_id>]
     for key in request.form:
@@ -143,19 +168,27 @@ def inject_cart_count():
     return dict(cart_count=count)
 
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
-@login_required
 def add_to_cart(product_id):
     quantity = int(request.form.get('quantity', 1))
-    cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    if current_user.is_authenticated:
+        cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_id).first()
 
     if cart_item:
         cart_item.quantity += quantity
     else:
-        cart_item = CartItem(user_id=current_user.id, product_id=product_id, quantity=quantity)
-        db.session.add(cart_item)
+        add_to_session_cart(product_id, quantity)
 
     db.session.commit()
     return redirect(url_for('shop'))
+
+@app.route('/checkout')
+def checkout():
+    if not current_user.is_authenticated:
+        flash("Please log in or register to continue to checkout.", "warning")
+        return redirect(url_for('login', next='checkout'))
+
+    # address confirmation, payment, etc
+    return render_template('checkout.html')
 
 # if __name__ == "__main__":
 #     app.run(debug=True)

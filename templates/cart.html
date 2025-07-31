@@ -3,7 +3,7 @@
 {% block title %}Your Cart{% endblock %}
 
 {% block header %}
-  <h1>Your Cart</h1>
+<h1>Your Cart</h1>
 {% endblock %}
 
 {% block content %}
@@ -34,4 +34,10 @@
   </table>
   <button type="submit">Update Cart</button>
 </form>
+
+{% if cart_items %}
+<form action="{{ url_for('checkout') }}" method="get">
+  <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+</form>
+{% endif %}
 {% endblock %}
