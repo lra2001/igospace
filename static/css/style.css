@@ -275,8 +275,7 @@ form label {
 }
 
 form input,
-form select,
-form textarea {
+form select {
     width: 100%;
     padding: 10px 12px;
     margin-bottom: 18px;
@@ -290,8 +289,7 @@ form textarea {
 }
 
 form input:focus,
-form select:focus,
-form textarea:focus {
+form select:focus{
     outline: none;
     border-color: #6f8cc7;
     background: #283446;
@@ -334,13 +332,16 @@ form input[type="submit"]:hover {
 
 .error-message {
     margin-top: 5px;
+    margin-bottom: 10px;
     color: #ff4c4c;
     font-size: 0.9em;
 }
 
-.input-error {
+form input.input-error {
+    margin-bottom: 0;
     border: 1px solid #ff4c4c !important;
     background-color: #fff0f0;
+    color: #333;
 }
 
 .password-instructions {

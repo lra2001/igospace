@@ -12,6 +12,7 @@ This website includes the following pages:
 - Register
 - Shop
 - Cart
+- Checkout
 
 And uses the languages/modules below:
 - Python
@@ -23,7 +24,6 @@ And uses the languages/modules below:
 - SQLAlchemy
 
 ### Create Project
-
 - Set up the Flask Environment:
   - Initialize a virtual environment by running the command: python -m venv venv
   - Activate the virtual environment on Windows: venv\Scripts\activate
@@ -35,6 +35,18 @@ And uses the languages/modules below:
 - Install SQLAlchemy
   - pip install SQLAlchemy
   - pip install flask_sqlalchemy, sqlalchemy.orm
+
+### Deploy in render
+- Create an account in [render](https://render.com/) and connect to your GitHub account
+- Create a New Workspace
+- Create new service and select Postgres to create the database
+- Create new service, select Web Services and your GitHub repository
+  - Make sure your Build Command is pip install -r requirements.txt
+  - Make sure your start command is gunicorn app:app
+- Click the 3 dots next to your Web Service and Settings
+- Click Environment under Manage
+- Create a new Environment Variable with the key DATABASE_URL. You can get the values needed on the Postgres service
+
 
 ### Software
 - Visual Studio Code
@@ -59,6 +71,7 @@ And uses the languages/modules below:
 - [Image Resizer](https://imageresizer.com/)
 - [Create Logo](https://www.canva.com/)
 - [Convert to favicon](https://favicon.io/favicon-converter/)
+- [AI Image Generator](https://deepai.org/)
 
 ### Errors
 - [Import "flask_sqlalchemy" could not be resolved](https://stackoverflow.com/questions/64981804/importerror-flask-sqlalchemy-could-not-be-resolved)
