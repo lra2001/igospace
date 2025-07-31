@@ -213,14 +213,46 @@ def add_to_cart(product_id):
         add_to_session_cart(product_id, quantity)
     return redirect(url_for('shop'))
 
-@app.route('/checkout')
+@app.route('/checkout', methods=['GET', 'POST'])
+@login_required
 def checkout():
-    if not current_user.is_authenticated:
-        flash("Please log in or register to continue to checkout.", "warning")
-        return redirect(url_for('login', next='checkout'))
+    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    if not cart_items:
+        flash("Your cart is empty.", "warning")
+        return redirect(url_for('cart'))
 
-    # address confirmation, payment, etc
-    return render_template('checkout.html')
+    if request.method == 'POST':
+        total = sum(item.product.price * item.quantity for item in cart_items)
+
+        new_order = Order(user_id=current_user.id, total_amount=total)
+        db.session.add(new_order)
+        db.session.flush()  # Get new_order.id without committing yet
+
+        for item in cart_items:
+            order_item = OrderItem(
+                order_id=new_order.id,
+                product_id=item.product.id,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+            db.session.add(order_item)
+            db.session.delete(item)  # Clear cart
+
+        db.session.commit()
+        flash("Order placed successfully!", "success")
+        return redirect(url_for('order_confirmation', order_id=new_order.id))
+
+    total = sum(item.product.price * item.quantity for item in cart_items)
+    return render_template('checkout.html', cart_items=cart_items, total=total)
+
+@app.route('/order_confirmation/<int:order_id>')
+@login_required
+def order_confirmation(order_id):
+    order = Order.query.get_or_404(order_id)
+    if order.user_id != current_user.id:
+        flash("You are not authorized to view this order.", "danger")
+        return redirect(url_for('home'))
+    return render_template('order_confirmation.html', order=order)
 
 if __name__ == "__main__":
     app.run(debug=True)
