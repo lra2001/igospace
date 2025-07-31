@@ -12,6 +12,11 @@ if (registerForm) {
 
   let isValid = true;
 
+  function getLabelText(input) {
+      const label = document.querySelector(`label[for="${input.id}"]`);
+      return label ? label.textContent : input.name;
+    }
+
   function showError(input, message) {
     isValid = false;
     input.classList.add('input-error');
@@ -26,7 +31,7 @@ if (registerForm) {
   // Required fields check
   inputs.forEach(field => {
     if (!field.value.trim()) {
-      showError(field, `${field.name.charAt(0).toUpperCase() + field.name.slice(1)} is required`);
+      showError(field, `${getLabelText(field)} is required`);
     }
   });
 
