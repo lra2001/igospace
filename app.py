@@ -99,7 +99,7 @@ def logout():
 
 @app.route('/shop')
 def shop():
-    products = Product.query.all()
+    products = Product.query.order_by(Product.id.asc()).all()
     return render_template('shop.html', products=products, active_page='shop')
 
 @app.route('/cart')
