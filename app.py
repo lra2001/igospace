@@ -83,6 +83,18 @@ def login():
 
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
+
+            session_cart = session.get('cart', {})
+            for product_id, quantity in session_cart.items():
+                cart_item = CartItem.query.filter_by(user_id=user.id, product_id=product_id).first()
+                if cart_item:
+                    cart_item.quantity += quantity
+                else:
+                    new_item = CartItem(user_id=user.id, product_id=product_id, quantity=quantity)
+                    db.session.add(new_item)
+            db.session.commit()
+            session.pop('cart', None)
+
             flash("Logged in successfully.", "success")
             return redirect(url_for(next_page)) if next_page else redirect(url_for("home"))
         else:
