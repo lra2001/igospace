@@ -3,7 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
-from models import db, User, Product, CartItem
+from models import db, User, Product, CartItem, Order, OrderItem
 
 # create the app
 app = Flask(__name__)
@@ -96,7 +96,7 @@ def login():
             session.pop('cart', None)
 
             flash("Logged in successfully.", "success")
-            return redirect(url_for(next_page)) if next_page else redirect(url_for("home"))
+            return redirect(next_page) if next_page else redirect(url_for("home"))
         else:
             flash("Invalid credentials. Please try again.", "danger")
 
@@ -245,13 +245,15 @@ def checkout():
     total = sum(item.product.price * item.quantity for item in cart_items)
     return render_template('checkout.html', cart_items=cart_items, total=total)
 
-@app.route('/order_confirmation/<int:order_id>')
+@app.route('/order-confirmation/<int:order_id>')
 @login_required
 def order_confirmation(order_id):
     order = Order.query.get_or_404(order_id)
+
     if order.user_id != current_user.id:
-        flash("You are not authorized to view this order.", "danger")
+        flash("Access denied to this order.", "danger")
         return redirect(url_for('home'))
+
     return render_template('order_confirmation.html', order=order)
 
 if __name__ == "__main__":
