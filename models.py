@@ -24,6 +24,7 @@ class Product(db.Model):
     image_url = db.Column(db.String(255), nullable=True)
 
     cart_items = db.relationship('CartItem', backref='product', lazy=True)
+    order_items = db.relationship('OrderItem', backref='product', lazy=True)
 
     def __repr__(self):
         return f"<Product id={self.id} name={self.name} price={self.price}>"
@@ -36,6 +37,10 @@ class CartItem(db.Model):
 
     user = db.relationship('User', backref='cart_items')
 
+    @property
+    def subtotal(self):
+        return self.product.price * self.quantity
+
     def __repr__(self):
         return f"<CartItem id={self.id} user_id={self.user_id} product_id={self.product_id} quantity={self.quantity}>"
 
@@ -46,6 +51,10 @@ class Order(db.Model):
     total_amount = db.Column(db.Float, nullable=False)
 
     items = db.relationship('OrderItem', backref='order', lazy=True)
+    user = db.relationship('User', backref='orders')
+
+    def __repr__(self):
+        return f"<Order id={self.id} user_id={self.user_id} total={self.total_amount}>"
 
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,7 +63,5 @@ class OrderItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-class CartItem(db.Model):
-    @property
-    def subtotal(self):
-        return self.product.price * self.quantity
+    def __repr__(self):
+        return f"<OrderItem id={self.id} order_id={self.order_id} product_id={self.product_id} quantity={self.quantity} price={self.price}>"
