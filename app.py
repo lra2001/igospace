@@ -241,7 +241,7 @@ def checkout():
 
         db.session.commit()
         flash("Order placed successfully!", "success")
-        return redirect(url_for('order-confirmation', order_id=new_order.id))
+        return redirect(url_for('order_confirmation', order_id=new_order.id))
 
     total = sum(item.product.price * item.quantity for item in cart_items)
     return render_template('checkout.html', cart_items=cart_items, total=total)
