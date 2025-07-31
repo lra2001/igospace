@@ -106,6 +106,7 @@ def shop():
 def cart():
     if current_user.is_authenticated:
         cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+        return render_template('cart.html', cart_items=cart_items)
     else:
         session_cart = session.get('cart', {})
         products = Product.query.filter(Product.id.in_(session_cart.keys())).all()
@@ -135,27 +136,43 @@ def add_to_session_cart(product_id, quantity):
 
 @app.route('/update_cart', methods=['POST'])
 def update_cart():
-    # Parse quantities from form inputs named like quantities[<item_id>]
-    for key in request.form:
-        if key.startswith('quantities[') and key.endswith(']'):
-            item_id = key[11:-1]  # Extract item id inside the brackets
-            quantity = request.form.get(key, type=int)
+    if current_user.is_authenticated:
+        # Update DB cart for logged-in users
+        for key in request.form:
+            if key.startswith('quantities[') and key.endswith(']'):
+                item_id = key[11:-1]
+                quantity = request.form.get(key, type=int)
+                cart_item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first()
+                if cart_item:
+                    if quantity and quantity > 0:
+                        cart_item.quantity = quantity
+                    else:
+                        db.session.delete(cart_item)
+        # Remove items explicitly checked for removal
+        remove_ids = request.form.getlist('remove')
+        for item_id in remove_ids:
             cart_item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first()
             if cart_item:
+                db.session.delete(cart_item)
+        db.session.commit()
+    else:
+        # Update session cart for guests
+        cart = session.get('cart', {})
+        # Update quantities
+        for key in request.form:
+            if key.startswith('quantities[') and key.endswith(']'):
+                item_id = key[11:-1]
+                quantity = request.form.get(key, type=int)
                 if quantity and quantity > 0:
-                    cart_item.quantity = quantity
+                    cart[item_id] = quantity
                 else:
-                    # Remove item if quantity <= 0
-                    db.session.delete(cart_item)
+                    cart.pop(item_id, None)
+        # Remove items explicitly checked for removal
+        remove_ids = request.form.getlist('remove')
+        for item_id in remove_ids:
+            cart.pop(item_id, None)
+        session['cart'] = cart
 
-    # Remove items explicitly checked for removal
-    remove_ids = request.form.getlist('remove')
-    for item_id in remove_ids:
-        cart_item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first()
-        if cart_item:
-            db.session.delete(cart_item)
-
-    db.session.commit()
     flash("Cart updated successfully!", "success")
     return redirect(url_for('cart'))
 
@@ -164,21 +181,24 @@ def inject_cart_count():
     if current_user.is_authenticated:
         count = CartItem.query.filter_by(user_id=current_user.id).count()
     else:
-        count = 0
+        cart = session.get('cart', {})
+        count = sum(cart.values())
     return dict(cart_count=count)
 
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
     quantity = int(request.form.get('quantity', 1))
+    cart_item = None
     if current_user.is_authenticated:
         cart_item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_id).first()
-
-    if cart_item:
-        cart_item.quantity += quantity
+        if cart_item:
+            cart_item.quantity += quantity
+        else:
+            cart_item = CartItem(user_id=current_user.id, product_id=product_id, quantity=quantity)
+            db.session.add(cart_item)
+        db.session.commit()
     else:
         add_to_session_cart(product_id, quantity)
-
-    db.session.commit()
     return redirect(url_for('shop'))
 
 @app.route('/checkout')
@@ -190,5 +210,5 @@ def checkout():
     # address confirmation, payment, etc
     return render_template('checkout.html')
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)

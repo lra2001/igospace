@@ -20,13 +20,15 @@
     <tbody>
       {% for item in cart_items %}
       <tr>
-        <td>{{ item.product.name }}</td>
+        <td>{{ item.product.name if item.product is defined else item['product'].name }}</td>
         <td>
-          <input type="number" name="quantities[{{ item.id }}]" value="{{ item.quantity }}" min="0">
+          <input type="number" name="quantities[{{ item.id if item.id is defined else item['product'].id }}]"
+            value="{{ item.quantity if item.quantity is defined else item['quantity'] }}" min="0">
         </td>
-        <td>€{{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+        <td>€{{ "%.2f"|format((item.product.price * item.quantity) if item.product is defined else item['subtotal'])}}
+        </td>
         <td>
-          <input type="checkbox" name="remove" value="{{ item.id }}">
+          <input type="checkbox" name="remove" value="{{ item.id if item.id is defined else item['product'].id }}">
         </td>
       </tr>
       {% endfor %}
