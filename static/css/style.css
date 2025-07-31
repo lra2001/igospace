@@ -270,9 +270,9 @@ form label {
     color: #a5b1c2;
 }
 
-form input[type="text"],
-form input[type="email"],
-form input[type="password"] {
+form input,
+form select,
+form textarea {
     width: 100%;
     padding: 10px 12px;
     margin-bottom: 18px;
@@ -285,9 +285,9 @@ form input[type="password"] {
     transition: border-color 0.3s ease;
 }
 
-form input[type="text"]:focus,
-form input[type="email"]:focus,
-form input[type="password"]:focus {
+form input:focus,
+form select:focus,
+form textarea:focus {
     outline: none;
     border-color: #6f8cc7;
     background: #283446;
