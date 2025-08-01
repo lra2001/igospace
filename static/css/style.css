@@ -166,17 +166,12 @@ body {
 
 /* NavBar styling */
 nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
     background: #000000;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    z-index: 1000;
     font-family: Arial, sans-serif;
 }
 
