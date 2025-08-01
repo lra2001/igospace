@@ -4,6 +4,8 @@
 
 iGo Space Travel is a shop aimed for space adventurers who would like to explore space and get the latest space gear. iGo Space Travel brings excitement, fun and adventure on a different number of activities designed for families, team building, solo explorers or simply commute. We can't wait to have you on board.
 
+This website is available in [Render](https://igospace.onrender.com)
+
 ## Website contents
 This website includes the following pages:
 - Base
@@ -13,15 +15,33 @@ This website includes the following pages:
 - Shop
 - Cart
 - Checkout
+- Order History
+- Order Confirmation
 
-And uses the languages/modules below:
+## Technologies Used
+
+### Languages and Frameworks
 - Python
 - HTML
 - CSS
 - JavaScript
-- PostgreSQL
+
+### Backend
 - Flask
-- SQLAlchemy
+- Flask-SQLAlchemy
+- PostgreSQL
+- Bcrypt
+
+### Frontend
+- Jinja2 (Flask templating)
+- Font Awesome (icons)
+- Bootstrap (for layout and responsiveness)
+
+### Tools
+- Visual Studio Code
+- GitHub Desktop
+- pgAdmin
+- PostgreSQL
 
 ### Create Project
 - Set up the Flask Environment:
@@ -32,11 +52,12 @@ And uses the languages/modules below:
   - Create a new Python file named app.py
 - Update Python
   - python.exe -m pip install --upgrade pip
-- Install SQLAlchemy
-  - pip install SQLAlchemy
-  - pip install flask_sqlalchemy, sqlalchemy.orm
+- Install Dependencies
+  - pip install Flask Flask-SQLAlchemy psycopg2-binary Flask-Bcrypt python-dotenv
+- Run Application
+  - python app.py
 
-### Deploy in render
+### Deploy on render
 - Create an account in [render](https://render.com/) and connect to your GitHub account
 - Create a New Workspace
 - Create new service and select Postgres to create the database
@@ -47,6 +68,39 @@ And uses the languages/modules below:
 - Click Environment under Manage
 - Create a new Environment Variable with the key DATABASE_URL. You can get the values needed on the Postgres service
 
+### Templating: Jinja2
+Jinja2 is Flask’s templating engine used to embed logic in HTML.
+| Feature                  | Usage                                               |
+| ------------------------ | --------------------------------------------------- |
+| `{{ variable }}`         | Output variables like `{{ current_user.username }}` |
+| `{% if / for %}`         | Control flow like `{% for item in cart_items %}`    |
+| `{% extends / block %}`  | Template inheritance                                |
+| `url_for()`              | Generates dynamic URLs                              |
+| `get_flashed_messages()` | Displays flash messages                             |
+
+[Jinja2 Docs](https://jinja.palletsprojects.com/en/3.1.x/templates/)
+
+### Javascript
+JavaScript handles interactivity and DOM updates.
+Example uses:
+- Updating the cart UI dynamically
+- Form validation
+- Interactive buttons
+[JavaScript Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+### Bootstrap
+Bootstrap helps build responsive layouts with utility classes and components.
+Example:
+```html
+<button class="btn btn-primary">Checkout</button>
+<div class="row">
+  <div class="col-md-6">Product Info</div>
+</div>
+```
+To include in project:
+```html
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+``
 
 ### Software
 - Visual Studio Code
