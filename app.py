@@ -263,5 +263,16 @@ def order_history():
     orders = Order.query.filter_by(user_id=current_user.id).order_by(Order.id.desc()).all()
     return render_template('order-history.html', orders=orders)
 
+@app.route('/order/<int:order_id>')
+@login_required
+def order_details(order_id):
+    order = Order.query.filter_by(id=order_id, user_id=current_user.id).first()
+
+    if not order:
+        flash("Order not found.", "danger")
+        return redirect(url_for('order_history'))
+
+    return render_template('order-details.html', order=order)
+
 if __name__ == "__main__":
     app.run(debug=True)

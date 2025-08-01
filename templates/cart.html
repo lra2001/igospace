@@ -23,7 +23,8 @@
         <td class="product-name">{{ item.product.name if item.product is defined else item['product'].name }}</td>
         <td>
           <input type="number" name="quantities[{{ item.id if item.id is defined else item['product'].id }}]"
-            value="{{ item.quantity if item.quantity is defined else item['quantity'] }}" min="0" class="quantity-input">
+            value="{{ item.quantity if item.quantity is defined else item['quantity'] }}" min="0"
+            class="quantity-input">
         </td>
         <td>
           €{{ "%.2f"|format((item.product.price * item.quantity) if item.product is defined else item['subtotal']) }}

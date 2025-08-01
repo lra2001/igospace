@@ -11,7 +11,8 @@
   {% for product in products %}
   <div class="product-card">
     {% if product.image_url %}
-    <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" class="thumbnail" data-full="{{ url_for('static', filename=product.image_url) }}">
+    <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" class="thumbnail"
+      data-full="{{ url_for('static', filename=product.image_url) }}">
     {% endif %}
 
     <h2>{{ product.name }}</h2>

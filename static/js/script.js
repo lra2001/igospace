@@ -11,6 +11,7 @@ document.querySelectorAll('.remove-icon').forEach(function(btn) {
 });
 
 // Get elements for thumbnail and modal
+if (document.querySelector('.thumbnail')) {
 const modal = document.getElementById("imageModal");
 const modalImg = document.getElementById("modalImage");
 const closeBtn = document.querySelector(".close");
@@ -32,3 +33,4 @@ window.onclick = (event) => {
     modal.style.display = "none";
   }
 };
+}
