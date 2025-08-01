@@ -9,3 +9,26 @@ document.querySelectorAll('.remove-icon').forEach(function(btn) {
     }
   });
 });
+
+// Get elements for thumbnail and modal
+const modal = document.getElementById("imageModal");
+const modalImg = document.getElementById("modalImage");
+const closeBtn = document.querySelector(".close");
+
+document.querySelectorAll('.thumbnail').forEach((img) => {
+  img.addEventListener('click', () => {
+    const fullSrc = img.getAttribute('data-full');
+    modalImg.src = fullSrc;
+    modal.style.display = "block";
+  });
+});
+
+closeBtn.onclick = () => {
+  modal.style.display = "none";
+};
+
+window.onclick = (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};

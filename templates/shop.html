@@ -11,8 +11,9 @@
   {% for product in products %}
   <div class="product-card">
     {% if product.image_url %}
-    <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}">
+    <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" class="thumbnail" data-full="{{ url_for('static', filename=product.image_url) }}">
     {% endif %}
+
     <h2>{{ product.name }}</h2>
     <p>{{ product.description }}</p>
     <p><strong>€{{ "%.2f"|format(product.price) }}</strong></p>
@@ -22,5 +23,10 @@
     </form>
   </div>
   {% endfor %}
+</div>
+
+<div id="imageModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="modalImage" alt="Enlarged view" />
 </div>
 {% endblock %}
