@@ -68,6 +68,56 @@ This website includes the following pages:
 - Click Environment under Manage
 - Create a new Environment Variable with the key DATABASE_URL. You can get the values needed on the Postgres service
 
+### Database Migrations
+To update prod db when changes are made on the database schema (new tables, columns, etc)
+1. Install Flask-Migrate
+```bash
+pip install Flask-Migrate
+```
+2. Initialise Migrations
+```python
+from flask_migrate import Migrate
+migrate = Migrate(app, db)
+```
+2.1 Run in terminal
+```bash
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+```
+[Flask-Migration Documentation](https://flask-migrate.readthedocs.io/en/latest/)
+
+### Entity Relationship Diagram (ERD)
+This project uses a relational database (PostgreSQL) with the following tables:
+- users – Stores user information including names, email, and hashed passwords.
+- products – Catalog of space gear and travel packages.
+- cart_items – Tracks the user’s cart, whether logged in or a guest.
+- orders – Stores completed orders and associated user.
+- order_items – Links products to orders with quantity and price.
+
+The relationships are:
+- One User → Many Orders
+- One Order → Many OrderItems
+- One Product → Many OrderItems
+- One User → Many CartItems
+
+Visual Representation
+![Entity Relationship Diagram](ERD.jpg)
+
+### Reset Password (PostgreSQL + Bcrypt)
+Since password reset was not developed for this app, and passwords are hashed with bcrypt, a short Python file was created to generate a new password and print the new password in hashed format when app runs
+```python
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
+hashed_password = bcrypt.generate_password_hash("newPassword!").decode('utf-8')
+print(hashed_password)
+```
+Run the SQL script:
+```sql
+UPDATE users SET password = 'hashed_value_here' WHERE email = 'user@example.com';
+```
+
 ### Templating: Jinja2
 Jinja2 is Flask’s templating engine used to embed logic in HTML.
 | Feature                  | Usage                                               |
@@ -78,7 +128,7 @@ Jinja2 is Flask’s templating engine used to embed logic in HTML.
 | `url_for()`              | Generates dynamic URLs                              |
 | `get_flashed_messages()` | Displays flash messages                             |
 
-[Jinja2 Docs](https://jinja.palletsprojects.com/en/3.1.x/templates/)
+[Jinja2 Documentation](https://jinja.palletsprojects.com/en/3.1.x/templates/)
 
 ### Javascript
 JavaScript handles interactivity and DOM updates.
@@ -86,7 +136,7 @@ Example uses:
 - Updating the cart UI dynamically
 - Form validation
 - Interactive buttons
-[JavaScript Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[JavaScript Documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 ### Bootstrap
 Bootstrap helps build responsive layouts with utility classes and components.
@@ -100,7 +150,26 @@ Example:
 To include in project:
 ```html
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-``
+```
+### Font Awesome
+Font Awesome provides scalable vector icons for buttons, navbars, etc.
+Example:
+```html
+<i class="fa fa-shopping-cart"></i>
+<i class="fa fa-user-circle"></i>
+```
+[Font Awesome Documentation](https://fontawesome.com/v5/docs/web/setup)
+
+To include in project:
+```html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+```
+
+### Environment Variables (example for .env. Render environment variables explained above)
+```python
+DATABASE_URL=postgresql://'username':'password'@'host':'port'/'database'
+SECRET_KEY='secretKey'
+```
 
 ### Software
 - Visual Studio Code
@@ -116,16 +185,16 @@ To include in project:
 - [Download Python](https://www.python.org/downloads/)
 - [Flask Installation](https://flask.palletsprojects.com/en/stable/installation/)
 - [Flask Quickstart](https://flask.palletsprojects.com/en/stable/quickstart/)
-- [Templates](https://flask.palletsprojects.com/en/stable/tutorial/templates/)
+- [Templates in Flask](https://flask.palletsprojects.com/en/stable/tutorial/templates/)
 - [SQL Alchemy - Installation Guide](https://docs.sqlalchemy.org/en/20/intro.html#installation)
 - [python-dotenv 1.1.1](https://pypi.org/project/python-dotenv/)
 
 ### Images
-- [Convert image type to WebP](https://www.freeconvert.com/webp-converter)
 - [Image Resizer](https://imageresizer.com/)
 - [Create Logo](https://www.canva.com/)
 - [Convert to favicon](https://favicon.io/favicon-converter/)
-- [AI Image Generator](https://deepai.org/)
+- [DeepAI - AI Image Generator](https://deepai.org/)
+- [ChatGPT - AI Image Generator](https://chatgpt.com/)
 
 ### Errors
 - [Import "flask_sqlalchemy" could not be resolved](https://stackoverflow.com/questions/64981804/importerror-flask-sqlalchemy-could-not-be-resolved)
